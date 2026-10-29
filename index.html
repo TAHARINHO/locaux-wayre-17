@@ -275,6 +275,16 @@ footer details p { margin-top: 8px; }
   /* la barre occupe deux lignes : le titre doit descendre d'autant */
   .hero-grid { padding-top: 178px; }
 }
+
+/* Sélecteur de langue — à droite, avant le bouton */
+.rightzone { display: flex; align-items: center; gap: 14px; }
+.lang { display: inline-flex; align-items: center; border: 1px solid rgba(235,203,112,.32); border-radius: 999px; overflow: hidden; }
+.lbtn { font-family: "Sora", Arial, sans-serif; font-weight: 600; font-size: .7rem; letter-spacing: .08em;
+  padding: 6px 11px; background: none; border: 0; cursor: pointer; color: #A9BDCC;
+  transition: background .32s, color .32s; }
+.lbtn.on { background: var(--goldgrad); color: #1A1204; }
+.lbtn:not(.on):hover { color: var(--gold1); }
+@media (max-width: 820px) { .rightzone { order: 2; } }
 </style>
 </head>
 <body>
@@ -284,7 +294,7 @@ footer details p { margin-top: 8px; }
 
 <main>
 <header class="hero" id="top">
-  <div class="topbar"><div class="wrap"><img src="images/logo-wayre.png" alt="WAYRE, the shortest way to real estate"><div class="tabs" role="tablist" aria-label="Navigation principale"><button class="tab" type="button" data-go="top">WAY-RE</button><button class="tab" type="button" data-go="offres">Offre</button><button class="tab" type="button" data-go="faq">FAQ</button></div><button class="btn mag" type="button" data-go="contact">Être contacté</button></div></div>
+  <div class="topbar"><div class="wrap"><img src="images/logo-wayre.png" alt="WAYRE, the shortest way to real estate"><div class="tabs" role="tablist" aria-label="Navigation principale"><button class="tab" type="button" data-go="pourquoi">WAY-RE</button><button class="tab" type="button" data-go="offres">Offre</button><button class="tab" type="button" data-go="faq">FAQ</button></div><div class="rightzone"><span class="lang" role="group" aria-label="Langue du site"><button class="lbtn on" type="button" data-lang="fr">FR</button><button class="lbtn" type="button" data-lang="en">EN</button></span><button class="btn mag" type="button" data-go="contact">Être contacté</button></div></div></div>
   <div class="wrap hero-grid">
     <div>
       <h1 aria-label="Le chemin le plus court vers l’immobilier professionnel à Paris 17">
