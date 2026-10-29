@@ -462,6 +462,39 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
 .bookok .linkbtn{ background:none; border:0; color:#7E94A8; font-family:"Sora",Arial,sans-serif; font-size:.78rem; text-decoration:underline; cursor:pointer; }
 .bookok .oknote{ margin-top:16px; font-size:.7rem; color:#5E7488; }
 .bookgrid[hidden], .stepper[hidden]{ display:none !important; }
+
+/* étape 3 : formulaire de confirmation */
+.bform{ grid-column:2 / 4; background:linear-gradient(180deg,#0F1A28,#0A1320);
+  border:1px solid rgba(235,203,112,.16); border-radius:16px; padding:20px; }
+.bform[hidden]{ display:none !important; }
+.bformhead{ display:flex; align-items:center; justify-content:space-between; gap:14px;
+  border:1px solid rgba(235,203,112,.18); border-radius:12px; padding:12px 16px; margin-bottom:18px;
+  background:rgba(235,203,112,.05); }
+.bformhead b{ display:block; font-family:"Sora",Arial,sans-serif; font-size:.86rem; color:#F5D89A; }
+.bformhead small{ display:block; font-size:.68rem; color:#7E94A8; margin-top:3px; }
+.bformhead .modif{ background:none; border:0; color:#93A7B8; font-family:"Sora",Arial,sans-serif; font-size:.74rem;
+  text-decoration:underline; cursor:pointer; }
+.bformhead .modif:hover{ color:#EBCB70; }
+.bfgrid{ display:grid; grid-template-columns:1fr 1fr; gap:12px 14px; }
+.bf{ display:flex; flex-direction:column; }
+.bf.full{ grid-column:1 / -1; }
+.bf label{ font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:#7E94A8; margin-bottom:6px; }
+.bf input,.bf select,.bf textarea{ width:100%; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.1);
+  border-radius:9px; padding:11px 12px; color:#F1EEE8; font-family:"Sora",Arial,sans-serif; font-size:.84rem; transition:border-color .3s, box-shadow .3s; }
+.bf textarea{ resize:vertical; min-height:74px; }
+.bf input::placeholder,.bf textarea::placeholder{ color:#5E7488; }
+.bf input:focus,.bf select:focus,.bf textarea:focus{ outline:none; border-color:rgba(235,203,112,.75); box-shadow:0 0 0 3px rgba(235,203,112,.12); }
+.bf select{ appearance:none; background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' fill='none' stroke='%23EBCB70' stroke-width='1.6' stroke-linecap='round'/></svg>");
+  background-repeat:no-repeat; background-position:right 12px center; padding-right:32px; }
+.bfcheck{ display:flex; gap:9px; align-items:flex-start; margin:14px 0 12px; cursor:pointer; }
+.bfcheck input{ width:14px; height:14px; flex:0 0 14px; margin-top:2px; accent-color:#EBCB70; }
+.bfcheck span{ font-size:.7rem; color:#8497A8; line-height:1.5; }
+.bfsubmit{ width:100%; display:flex; align-items:center; justify-content:center; gap:10px; }
+.bferr{ margin:10px 0 0; text-align:center; font-size:.74rem; color:#F0A8A0; min-height:0; }
+@media (max-width: 1000px){
+  .bform{ grid-column:1 / -1; }
+  .bfgrid{ grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
@@ -572,6 +605,35 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
           <div class="slotgrid" id="slotgrid"></div>
           <button class="btn solid" type="button" id="bookConfirm" disabled>Confirmer ce créneau →</button>
           <p class="slotnote">Durée : 30 minutes · Horaires affichés en heure de Paris.</p>
+        </section>
+
+        <section class="bform" id="bookForm" hidden>
+          <div class="bformhead">
+            <div><b id="bfWhen">—</b><small>30 minutes · Paris 17e ou visioconférence</small></div>
+            <button type="button" class="modif" id="bfModif">Modifier</button>
+          </div>
+          <div class="bfgrid">
+            <div class="bf"><label for="bfPrenom">Prénom *</label><input id="bfPrenom" placeholder="Votre prénom" autocomplete="given-name"></div>
+            <div class="bf"><label for="bfNom">Nom *</label><input id="bfNom" placeholder="Votre nom" autocomplete="family-name"></div>
+            <div class="bf"><label for="bfEmail">Email *</label><input id="bfEmail" type="email" placeholder="vous@entreprise.fr" autocomplete="email"></div>
+            <div class="bf"><label for="bfSociete">Société *</label><input id="bfSociete" placeholder="Nom de votre société" autocomplete="organization"></div>
+            <div class="bf"><label for="bfSujet">Sujet principal *</label>
+              <select id="bfSujet">
+                <option value="">Sélectionnez un sujet</option>
+                <option>Investir dans le local loué</option>
+                <option>Acheter le local libre</option>
+                <option>Les deux locaux</option>
+                <option>Une question sur le dossier</option>
+              </select></div>
+            <div class="bf"><label for="bfVisio">Visioconférence</label>
+              <select id="bfVisio"><option>Teams</option><option>Google Meet</option><option>Zoom</option><option>Sur place, Paris 17e</option></select></div>
+            <div class="bf full"><label for="bfNote">Ce que vous aimeriez aborder</label>
+              <textarea id="bfNote" rows="3" placeholder="Contexte, enjeux, questions… (facultatif)"></textarea></div>
+          </div>
+          <label class="bfcheck"><input type="checkbox" id="bfConsent"><span>J’accepte que mes informations soient utilisées uniquement pour organiser ce rendez-vous.</span></label>
+          <button class="btn solid bfsubmit" type="button" id="bfSubmit">Confirmer mon rendez-vous
+            <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 12h15M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="bferr" id="bfErr"></p>
         </section>
       </div>
 
@@ -965,6 +1027,9 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     wrap.hidden=false; document.body.style.overflow='hidden'; majPhoto();
     var g=document.querySelector('.bookgrid'), st=document.querySelector('.stepper'), o=document.getElementById('bookok');
     if(g) g.hidden=false; if(st) st.hidden=false; if(o) o.hidden=true;
+    var _bf=document.getElementById('bookForm'); if(_bf) _bf.hidden=true;
+    var _ca=document.querySelector('.bcal'), _sl=document.querySelector('.bslots'); if(_ca) _ca.hidden=false; if(_sl) _sl.hidden=false;
+    if(bfErr) bfErr.textContent='';
     render();
   }
   function closeBook(){ wrap.hidden=true; document.body.style.overflow=''; }
@@ -1047,18 +1112,75 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     a.download='rdv-wayre.ics'; a.click(); URL.revokeObjectURL(a.href);
   });
 
+
+  /* ── étape 3 : formulaire, puis confirmation ── */
+  var bf=document.getElementById('bookForm'), bfWhen=document.getElementById('bfWhen'),
+      bfErr=document.getElementById('bfErr'), bfSubmit=document.getElementById('bfSubmit');
+  function showStep3(){
+    document.querySelector('.bcal').hidden=true;
+    document.querySelector('.bslots').hidden=true;
+    bf.hidden=false;
+    document.getElementById('stp2').classList.remove('on');
+    document.getElementById('stp3').classList.add('on');
+    var d=chosenDay.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    d=d.charAt(0).toUpperCase()+d.slice(1);
+    bfWhen.textContent=d+' · '+chosenSlot;
+    // préremplissage depuis le formulaire de contact
+    var n=document.getElementById('nom').value.trim(), m=document.getElementById('email').value.trim();
+    if(n){ var parts=n.split(' '); document.getElementById('bfPrenom').value=parts[0]||''; document.getElementById('bfNom').value=parts.slice(1).join(' ')||''; }
+    if(m) document.getElementById('bfEmail').value=m;
+    var of=document.getElementById('offre');
+    if(of){ var s2=document.getElementById('bfSujet');
+      if(of.value.indexOf('loué')>=0) s2.value='Investir dans le local loué';
+      else if(of.value.indexOf('libre')>=0) s2.value='Acheter le local libre';
+      else s2.value='Les deux locaux'; }
+  }
+  function backStep2(){
+    bf.hidden=true;
+    document.querySelector('.bcal').hidden=false;
+    document.querySelector('.bslots').hidden=false;
+    document.getElementById('stp3').classList.remove('on');
+    document.getElementById('stp2').classList.add('on');
+  }
+  document.getElementById('bfModif').addEventListener('click', backStep2);
+
+  bfSubmit.addEventListener('click', function(){
+    var prenom=document.getElementById('bfPrenom').value.trim(),
+        nom=document.getElementById('bfNom').value.trim(),
+        mail=document.getElementById('bfEmail').value.trim(),
+        soc=document.getElementById('bfSociete').value.trim(),
+        sujet=document.getElementById('bfSujet').value,
+        visio=document.getElementById('bfVisio').value,
+        note=document.getElementById('bfNote').value.trim(),
+        consent=document.getElementById('bfConsent').checked;
+    bfErr.textContent='';
+    if(!prenom||!nom||!soc||!sujet){ bfErr.textContent='Merci de compléter le prénom, le nom, la société et le sujet.'; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(mail)){ bfErr.textContent='Merci d’indiquer un email valide.'; return; }
+    if(!consent){ bfErr.textContent='Merci d’accepter l’utilisation de vos informations.'; return; }
+
+    var jourV=chosenDay.toISOString().slice(0,10);
+    bfSubmit.disabled=true;
+    fetch(API_RDV,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({nom:prenom+' '+nom,email:mail,tel:document.getElementById('tel').value.trim(),
+        jour:jourV,creneau:chosenSlot,sujet:sujet,visio:visio,societe:soc,note:note})})
+      .catch(function(){})
+      .finally(function(){
+        document.querySelector('.bookgrid').hidden=true;
+        document.querySelector('.stepper').hidden=true;
+        var ok=document.getElementById('bookok'); ok.hidden=false;
+        var t=chosenDay.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' à '+chosenSlot;
+        document.getElementById('okWhen').textContent=t.charAt(0).toUpperCase()+t.slice(1);
+      });
+  });
+
   confirmBtn.addEventListener('click', function(){
     if(!chosenDay||!chosenSlot) return;
     var nomV=document.getElementById('nom').value||'', mailV=document.getElementById('email').value||'', telV=document.getElementById('tel').value||'';
     var jourV=chosenDay? chosenDay.toISOString().slice(0,10) : '';
     fetch(API_RDV,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({nom:nomV,email:mailV,tel:telV,jour:jourV,creneau:chosenSlot})}).catch(function(){});
-    /* confirmation DANS le site : aucune sortie, aucune page externe */
-    document.querySelector('.bookgrid').hidden=true;
-    document.querySelector('.stepper').hidden=true;
-    var ok=document.getElementById('bookok'); ok.hidden=false;
-    var txt=chosenDay.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' à '+chosenSlot;
-    document.getElementById('okWhen').textContent=txt.charAt(0).toUpperCase()+txt.slice(1);
+    /* étape 3 : formulaire de confirmation, toujours dans le site */
+    showStep3();
   });
 })();
 </script>
