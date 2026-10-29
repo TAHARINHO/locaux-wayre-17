@@ -495,6 +495,15 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   .bform{ grid-column:1 / -1; }
   .bfgrid{ grid-template-columns:1fr; }
 }
+
+/* choix particulier / société */
+.bfseg{ display:flex; gap:6px; margin-bottom:7px; }
+.bfseg button{ flex:1; font-family:"Sora",Arial,sans-serif; font-size:.7rem; letter-spacing:.06em; padding:8px 6px;
+  border-radius:8px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.03); color:#A9BDCC;
+  cursor:pointer; transition:all .25s; }
+.bfseg button:hover{ border-color:rgba(235,203,112,.5); color:#F5D89A; }
+.bfseg button.on{ background:var(--goldgrad); color:#1A1204; border-color:transparent; font-weight:600; }
+#bfSociete[hidden]{ display:none !important; }
 </style>
 </head>
 <body>
@@ -616,7 +625,14 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
             <div class="bf"><label for="bfPrenom">Prénom *</label><input id="bfPrenom" placeholder="Votre prénom" autocomplete="given-name"></div>
             <div class="bf"><label for="bfNom">Nom *</label><input id="bfNom" placeholder="Votre nom" autocomplete="family-name"></div>
             <div class="bf"><label for="bfEmail">Email *</label><input id="bfEmail" type="email" placeholder="vous@entreprise.fr" autocomplete="email"></div>
-            <div class="bf"><label for="bfSociete">Société *</label><input id="bfSociete" placeholder="Nom de votre société" autocomplete="organization"></div>
+            <div class="bf">
+              <label>Vous êtes *</label>
+              <div class="bfseg" id="bfSeg">
+                <button type="button" class="on" data-prof="particulier">Particulier</button>
+                <button type="button" data-prof="societe">Société</button>
+              </div>
+              <input id="bfSociete" placeholder="Nom de la société" autocomplete="organization" hidden>
+            </div>
             <div class="bf"><label for="bfSujet">Sujet principal *</label>
               <select id="bfSujet">
                 <option value="">Sélectionnez un sujet</option>
@@ -1116,6 +1132,21 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   /* ── étape 3 : formulaire, puis confirmation ── */
   var bf=document.getElementById('bookForm'), bfWhen=document.getElementById('bfWhen'),
       bfErr=document.getElementById('bfErr'), bfSubmit=document.getElementById('bfSubmit');
+
+  /* particulier / société */
+  var profil='particulier';
+  var seg=document.getElementById('bfSeg');
+  if(seg){
+    seg.addEventListener('click', function(e){
+      var b=e.target.closest('button[data-prof]'); if(!b) return;
+      [].forEach.call(seg.children, function(x){ x.classList.remove('on'); });
+      b.classList.add('on'); profil=b.getAttribute('data-prof');
+      var soc=document.getElementById('bfSociete');
+      soc.hidden = (profil!=='societe');
+      if(profil!=='societe') soc.value='';
+    });
+  }
+
   function showStep3(){
     document.querySelector('.bcal').hidden=true;
     document.querySelector('.bslots').hidden=true;
@@ -1154,7 +1185,8 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
         note=document.getElementById('bfNote').value.trim(),
         consent=document.getElementById('bfConsent').checked;
     bfErr.textContent='';
-    if(!prenom||!nom||!soc||!sujet){ bfErr.textContent='Merci de compléter le prénom, le nom, la société et le sujet.'; return; }
+    var besoinSoc = (profil==='societe');
+    if(!prenom||!nom||!sujet||(besoinSoc&&!soc)){ bfErr.textContent='Merci de compléter le prénom, le nom, '+(besoinSoc?'la société et ':'')+'le sujet.'; return; }
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(mail)){ bfErr.textContent='Merci d’indiquer un email valide.'; return; }
     if(!consent){ bfErr.textContent='Merci d’accepter l’utilisation de vos informations.'; return; }
 
@@ -1162,7 +1194,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     bfSubmit.disabled=true;
     fetch(API_RDV,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({nom:prenom+' '+nom,email:mail,tel:document.getElementById('tel').value.trim(),
-        jour:jourV,creneau:chosenSlot,sujet:sujet,visio:visio,societe:soc,note:note})})
+        jour:jourV,creneau:chosenSlot,sujet:sujet,visio:visio,societe:soc,profil:profil,note:note})})
       .catch(function(){})
       .finally(function(){
         document.querySelector('.bookgrid').hidden=true;
