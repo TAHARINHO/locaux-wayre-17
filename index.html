@@ -341,6 +341,9 @@ footer details p { margin-top: 8px; }
 .steps .stepmarker::after{ content:""; position:absolute; left:50%; top:13px; transform:translateX(-50%);
   width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent;
   border-top:6px solid rgba(235,203,112,.85); }
+
+/* Titre du bloc étapes : deux lignes, taille réduite, « EN 3 ÉTAPES » en doré */
+h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; line-height: 1.14; }
 </style>
 </head>
 <body>
@@ -487,7 +490,7 @@ footer details p { margin-top: 8px; }
   <div class="wrap steps-wrap">
     <div>
       <span class="eyebrow rv">Comment ça marche</span>
-      <h2 class="rv" style="--d:.06s">Du premier contact à la visite, en trois étapes</h2>
+      <h2 class="rv title-steps" style="--d:.06s">Du premier contact à la visite<br><span class="gold">EN 3 ÉTAPES</span></h2>
     </div>
     <div class="steps" id="steps">
       <div class="fill" aria-hidden="true"></div><div class="stepmarker" aria-hidden="true"></div>
