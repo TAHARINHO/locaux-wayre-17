@@ -447,6 +447,21 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
 }
 
 .donenote{ margin:-8px auto 14px; font-size:.74rem; color:#E8B872; max-width:44ch; }
+
+/* confirmation de rendez-vous, dans la fenêtre */
+.bookok{ max-width:560px; margin:0 auto; text-align:center; padding:34px 20px 26px; background:linear-gradient(180deg,#0F1A28,#0A1320);
+  border:1px solid rgba(235,203,112,.22); border-radius:16px; }
+.bookok[hidden]{ display:none !important; }
+.bookok .okmark{ width:58px; height:58px; margin:0 auto 18px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  color:#1A1204; background:var(--goldgrad); box-shadow:0 14px 34px -14px rgba(235,203,112,.95); }
+.bookok .okmark svg{ width:28px; height:28px; }
+.bookok h3{ font-family:"Sora",Arial,sans-serif; font-size:1.55rem; font-weight:600; color:#F7F3E9; margin-bottom:10px; }
+.bookok .okwhen{ font-family:"Sora",Arial,sans-serif; font-size:1.05rem; color:#F5D89A; }
+.bookok .okmeta{ margin-top:6px; font-size:.82rem; color:#8497A8; }
+.bookok .okbtns{ display:flex; align-items:center; justify-content:center; gap:16px; margin-top:22px; flex-wrap:wrap; }
+.bookok .linkbtn{ background:none; border:0; color:#7E94A8; font-family:"Sora",Arial,sans-serif; font-size:.78rem; text-decoration:underline; cursor:pointer; }
+.bookok .oknote{ margin-top:16px; font-size:.7rem; color:#5E7488; }
+.bookgrid[hidden], .stepper[hidden]{ display:none !important; }
 </style>
 </head>
 <body>
@@ -558,6 +573,18 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
           <button class="btn solid" type="button" id="bookConfirm" disabled>Confirmer ce créneau →</button>
           <p class="slotnote">Durée : 30 minutes · Horaires affichés en heure de Paris.</p>
         </section>
+      </div>
+
+      <div class="bookok" id="bookok" hidden>
+        <div class="okmark"><svg viewBox="0 0 32 32"><path d="M7 17l6 6L25 10" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Rendez-vous confirmé.</h3>
+        <p class="okwhen" id="okWhen">—</p>
+        <p class="okmeta">30 minutes · Paris 17e ou visioconférence</p>
+        <div class="okbtns">
+          <button class="btn solid" type="button" id="icsBtn">Ajouter à mon agenda</button>
+          <button class="linkbtn" type="button" id="okClose">Fermer</button>
+        </div>
+        <p class="oknote">Un rappel vous sera envoyé avant le rendez-vous.</p>
       </div>
     </div>
   </div>
@@ -934,7 +961,12 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   var view=new Date(today.getFullYear(), today.getMonth(), 1);
   var chosenDay=null, chosenSlot=null;
 
-  function openBook(){ wrap.hidden=false; document.body.style.overflow='hidden'; majPhoto(); render(); }
+  function openBook(){
+    wrap.hidden=false; document.body.style.overflow='hidden'; majPhoto();
+    var g=document.querySelector('.bookgrid'), st=document.querySelector('.stepper'), o=document.getElementById('bookok');
+    if(g) g.hidden=false; if(st) st.hidden=false; if(o) o.hidden=true;
+    render();
+  }
   function closeBook(){ wrap.hidden=true; document.body.style.overflow=''; }
   function mk(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
 
@@ -994,14 +1026,39 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   wrap.addEventListener('click', function(e){ if(e.target===wrap) closeBook(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !wrap.hidden) closeBook(); });
 
+  document.getElementById('okClose').addEventListener('click', closeBook);
+  document.getElementById('icsBtn').addEventListener('click', function(){
+    if(!chosenDay||!chosenSlot) return;
+    var y=chosenDay.getFullYear(), mo=String(chosenDay.getMonth()+1).padStart(2,'0'), d=String(chosenDay.getDate()).padStart(2,'0');
+    var h=chosenSlot.replace(':','');
+    var endH=parseInt(chosenSlot.slice(0,2),10), endM=parseInt(chosenSlot.slice(3),10)+30;
+    if(endM>=60){ endH+=1; endM-=60; }
+    var hEnd=String(endH).padStart(2,'0')+String(endM).padStart(2,'0');
+    var stamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+    var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//WAYRE//RDV//FR','CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT','UID:'+Date.now()+'@wayre.com','DTSTAMP:'+stamp,
+      'DTSTART;TZID=Europe/Paris:'+y+mo+d+'T'+h+'00',
+      'DTEND;TZID=Europe/Paris:'+y+mo+d+'T'+hEnd+'00',
+      'SUMMARY:Rendez-vous WAYRE - locaux Paris 17e',
+      'LOCATION:Paris 17e ou visioconference',
+      'DESCRIPTION:30 minutes avec l equipe WAYRE.','END:VEVENT','END:VCALENDAR'].join('\r\n');
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(new Blob([ics],{type:'text/calendar'}));
+    a.download='rdv-wayre.ics'; a.click(); URL.revokeObjectURL(a.href);
+  });
+
   confirmBtn.addEventListener('click', function(){
     if(!chosenDay||!chosenSlot) return;
     var nomV=document.getElementById('nom').value||'', mailV=document.getElementById('email').value||'', telV=document.getElementById('tel').value||'';
     var jourV=chosenDay? chosenDay.toISOString().slice(0,10) : '';
     fetch(API_RDV,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({nom:nomV,email:mailV,tel:telV,jour:jourV,creneau:chosenSlot})}).catch(function(){});
-    var n=encodeURIComponent(nomV), m=encodeURIComponent(mailV), t=encodeURIComponent(telV);
-    window.open(ICAL+'?iclosedName='+n+'&iclosedEmail='+m+'&iclosedPhone='+t,'_blank','noopener');
+    /* confirmation DANS le site : aucune sortie, aucune page externe */
+    document.querySelector('.bookgrid').hidden=true;
+    document.querySelector('.stepper').hidden=true;
+    var ok=document.getElementById('bookok'); ok.hidden=false;
+    var txt=chosenDay.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' à '+chosenSlot;
+    document.getElementById('okWhen').textContent=txt.charAt(0).toUpperCase()+txt.slice(1);
   });
 })();
 </script>
