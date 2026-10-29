@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>A · l'arche vivante</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+  .msg{justify-content:flex-start;padding-top:36px}
+  .msg h3{font-size:31px}
+  .arch{fill:none;stroke:url(#gA);stroke-width:1.8;vector-effect:non-scaling-stroke}
+  .arch2{fill:none;stroke:rgba(235,203,112,.13);stroke-width:1;vector-effect:non-scaling-stroke}
+  .node{fill:#EBCB70;filter:drop-shadow(0 0 9px rgba(235,203,112,.9))}
+  .lbl{font-family:Sora;font-size:10px;letter-spacing:.2em;fill:rgba(235,203,112,.8)}
+  .stg{fill:#0B1B33;stroke:rgba(235,203,112,.45);stroke-width:1.2;vector-effect:non-scaling-stroke;
+       transition:fill .35s,stroke .35s}
+  .stg.on{fill:#EBCB70;stroke:#FFF2CF}
+  .stg-txt{font-family:Sora;font-size:8.5px;letter-spacing:.16em;fill:rgba(235,203,112,.35);
+       text-transform:uppercase;transition:fill .35s}
+  .stg-txt.on{fill:#F5D89A}
+  .mover{fill:#FFF6DF;filter:drop-shadow(0 0 12px rgba(255,240,200,1))}
+</style></head>
+<body>
+<div class="bg"></div>
+
+<svg class="stage" viewBox="0 0 1440 470" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="gA" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(235,203,112,.18)"/>
+      <stop offset=".5" stop-color="#EBCB70"/>
+      <stop offset="1" stop-color="rgba(235,203,112,.18)"/>
+    </linearGradient>
+  </defs>
+  <path class="arch2" d="M40 420 C 380 156 1060 156 1400 420"/>
+  <path class="arch" id="arch" d="M40 420 C 380 132 1060 132 1400 420"/>
+  <circle class="node" cx="40" cy="420" r="5"/>
+  <circle class="node" cx="1400" cy="420" r="5"/>
+  <text class="lbl" x="56" y="398">CELUI QUI VEND</text>
+  <text class="lbl" x="1384" y="398" text-anchor="end">CELUI QUI ACHÈTE</text>
+</svg>
+
+<div class="veil"></div>
+
+<svg class="over" viewBox="0 0 1440 470" preserveAspectRatio="none" id="over"></svg>
+
+<div class="msg">
+  <h3>Vous parlez enfin <b>au propriétaire.</b></h3>
+  <p>Sans agence. Sans commission. Le dossier passe directement d'une main à l'autre.</p>
+</div>
+
+<div class="badge" id="badge">0 € de commission</div>
+
+<div class="marquee"><span>Paris 17e</span><span>77 m² Carrez</span><span>Diagnostics 2026</span><span>Visite sur rendez-vous</span><span>Wayre</span></div>
+
+<script>
+(function(){
+  const arch=document.getElementById('arch');
+  const over=document.getElementById('over');
+  const NS="http://www.w3.org/2000/svg";
+  const L=arch.getTotalLength();
+
+  const STAGES=[
+    {t:.08,label:"Annonce"},
+    {t:.28,label:"Contact direct"},
+    {t:.48,label:"Visite"},
+    {t:.70,label:"Offre"},
+    {t:.92,label:"Signature"}
+  ];
+  STAGES.forEach((s,i)=>{
+    const p=arch.getPointAtLength(L*s.t);
+    const c=document.createElementNS(NS,'circle');
+    c.setAttribute('cx',p.x); c.setAttribute('cy',p.y); c.setAttribute('r',4.5);
+    c.setAttribute('class','stg'); c.id='stg'+i; over.appendChild(c);
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('x',p.x); t.setAttribute('y',p.y-14);
+    t.setAttribute('text-anchor','middle'); t.setAttribute('class','stg-txt');
+    t.textContent=s.label; t.id='stgt'+i; over.appendChild(t);
+  });
+
+  const mover=document.createElementNS(NS,'circle');
+  mover.setAttribute('r',6); mover.setAttribute('class','mover');
+  over.appendChild(mover);
+  const halo=document.createElementNS(NS,'circle');
+  halo.setAttribute('r',14); halo.setAttribute('fill','rgba(255,240,200,.18)');
+  over.appendChild(halo);
+
+  const badge=document.getElementById('badge');
+  let t0=null, dur=6800, pause=1300;
+
+  function frame(ts){
+    if(!t0) t0=ts;
+    const elapsed=(ts-t0)%(dur+pause);
+    const p=Math.min(1,elapsed/dur);
+    const e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;      // easeInOutQuad
+    const pos=arch.getPointAtLength(L*e);
+    mover.setAttribute('cx',pos.x); mover.setAttribute('cy',pos.y);
+    halo.setAttribute('cx',pos.x); halo.setAttribute('cy',pos.y);
+    STAGES.forEach((s,i)=>{
+      const on=e>=s.t-0.004;
+      document.getElementById('stg'+i).classList.toggle('on',on);
+      document.getElementById('stgt'+i).classList.toggle('on',on);
+    });
+    badge.classList.toggle('on', p>=0.97);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body></html>

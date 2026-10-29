@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>C · les deux flux</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+  .msg{justify-content:flex-start;padding-top:36px}
+  .msg h3{font-size:31px}
+  .flow{fill:none;stroke-width:2.4;stroke-linecap:round;vector-effect:non-scaling-stroke}
+  .flow.g{stroke:url(#gG);filter:drop-shadow(0 0 8px rgba(235,203,112,.55))}
+  .flow.c{stroke:url(#gC);filter:drop-shadow(0 0 8px rgba(143,217,210,.55))}
+  .flow.thin{stroke-width:1;opacity:.22;filter:none}
+  .lbl{font-family:Sora;font-size:9.5px;letter-spacing:.2em;fill:rgba(235,203,112,.75);text-transform:uppercase}
+  .lbl.c{fill:rgba(143,217,210,.75)}
+  .lbl.mid{fill:rgba(247,243,233,.55);text-anchor:middle}
+  .meet{fill:#FFF6DF;filter:drop-shadow(0 0 16px rgba(255,240,200,1))}
+  .ring{fill:none;stroke:rgba(255,240,200,.7);stroke-width:1}
+</style></head>
+<body>
+<div class="bg"></div>
+
+<svg class="stage" viewBox="0 0 1440 470" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="gG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(235,203,112,.15)"/><stop offset=".7" stop-color="#F5D491"/><stop offset="1" stop-color="#FFF0C8"/>
+    </linearGradient>
+    <linearGradient id="gC" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(143,217,210,.12)"/><stop offset=".7" stop-color="#8FD9D2"/><stop offset="1" stop-color="#DFFBF7"/>
+    </linearGradient>
+  </defs>
+
+  <path class="flow thin" d="M-20 400 C 320 400 520 372 700 330"/>
+  <path class="flow thin" d="M-20 150 C 320 150 520 262 700 330"/>
+  <path class="flow thin" d="M700 330 C 900 330 1150 330 1440 330"/>
+
+  <path class="flow g" id="pg" d="M-20 400 C 320 400 520 372 700 330"/>
+  <path class="flow c" id="pc" d="M-20 150 C 320 150 520 262 700 330"/>
+  <path class="flow g" id="po" d="M700 330 C 900 330 1150 330 1440 330" style="opacity:.5"/>
+
+  <text class="lbl" x="60" y="424">Celui qui vend</text>
+  <text class="lbl c" x="60" y="132">Celui qui achète</text>
+  <text class="lbl mid" x="700" y="368">Le point de rencontre</text>
+</svg>
+
+<div class="veil" style="background:radial-gradient(46% 78% at 50% 50%,rgba(7,15,28,.88) 24%,rgba(7,15,28,.34) 66%,transparent 100%)"></div>
+
+<svg class="over" viewBox="0 0 1440 470" preserveAspectRatio="none" id="over">
+  <circle class="ring" cx="700" cy="330" r="14" id="ring"/>
+  <circle class="meet" cx="700" cy="330" r="6"/>
+</svg>
+
+<div class="msg">
+  <h3>Deux parties. <b>Un seul lien.</b></h3>
+  <p>Le vendeur et l'acheteur se rejoignent ici. Sans agence, sans commission.</p>
+</div>
+
+<div class="marquee"><span>Paris 17e</span><span>77 m² Carrez</span><span>Diagnostics 2026</span><span>Visite sur rendez-vous</span><span>Wayre</span></div>
+
+<script>
+(function(){
+  const NS="http://www.w3.org/2000/svg";
+  const over=document.getElementById('over');
+  const ring=document.getElementById('ring');
+  const paths=[
+    {el:document.getElementById('pg'), color:'#FFE9B8', n:10, delay:0},
+    {el:document.getElementById('pc'), color:'#BFF3EE', n:10, delay:160},
+    {el:document.getElementById('po'), color:'#FFE9B8', n:5, delay:0, out:true}
+  ];
+  const parts=[];
+  paths.forEach(p=>{
+    p.len=p.el.getTotalLength();
+    for(let i=0;i<p.n;i++){
+      const c=document.createElementNS(NS,'circle');
+      c.setAttribute('r', p.out?2.6:3.4);
+      c.setAttribute('fill',p.color);
+      c.style.filter='drop-shadow(0 0 6px '+p.color+')';
+      over.appendChild(c);
+      parts.push({node:c, path:p, offset:i*(p.out?420:300)+p.delay});
+    }
+  });
+
+  const CYCLE=2600;   // temps de traversée
+  let t0=null, lastArrival=0;
+
+  function frame(ts){
+    if(!t0) t0=ts;
+    const el=ts-t0;
+    parts.forEach(p=>{
+      const t=((el-p.offset)%4600+4600)%4600;
+      const prog=t/CYCLE;
+      if(prog>1){ p.node.setAttribute('opacity',0); return; }
+      const e=prog<.5?2*prog*prog:1-Math.pow(-2*prog+2,2)/2;
+      const pt=p.path.el.getPointAtLength(p.path.len*e);
+      p.node.setAttribute('cx',pt.x); p.node.setAttribute('cy',pt.y);
+      p.node.setAttribute('opacity', prog<.06?prog/.06 : (prog>.94?(1-prog)/.06:1));
+    });
+    // onde au point de rencontre
+    const phase=(el%2600)/2600;
+    ring.setAttribute('r', 10+phase*30);
+    ring.setAttribute('opacity', Math.max(0,.75-phase*.75));
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body></html>

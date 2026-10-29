@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<title>D · le parcours</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="base.css">
+<style>
+  .msg{justify-content:flex-start;padding-top:58px}
+  .msg h3{font-size:31px}
+  .msg p{max-width:620px}
+  .rail{stroke:rgba(235,203,112,.16);stroke-width:2;vector-effect:non-scaling-stroke}
+  .prog{stroke:url(#gP);stroke-width:2.4;vector-effect:non-scaling-stroke;stroke-linecap:round;
+    stroke-dasharray:1;stroke-dashoffset:1}
+  .step{font-family:Sora;font-size:9px;letter-spacing:.18em;fill:rgba(235,203,112,.34);text-transform:uppercase;
+    transition:fill .4s}
+  .step.on{fill:#F5D89A}
+  .num{font-family:Sora;font-size:8px;letter-spacing:.14em;fill:rgba(235,203,112,.3)}
+  .ven{fill:#EBCB70;filter:drop-shadow(0 0 10px rgba(235,203,112,.95))}
+  .ach{fill:#8FD9D2;filter:drop-shadow(0 0 10px rgba(143,217,210,.95))}
+  .tagv{font-family:Sora;font-size:8px;letter-spacing:.16em;fill:rgba(235,203,112,.7);text-anchor:middle}
+  .taga{font-family:Sora;font-size:8px;letter-spacing:.16em;fill:rgba(143,217,210,.7);text-anchor:middle}
+  .link2{stroke:#FFF3D2;stroke-width:2;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .3s;
+    filter:drop-shadow(0 0 8px rgba(255,240,200,.9))}
+  .cap{font-family:Sora;font-size:9px;letter-spacing:.1em;fill:rgba(163,182,199,.55)}
+  .seal{opacity:0;transform:scale(.8);transform-origin:720px 182px;transition:opacity .45s,transform .45s cubic-bezier(.2,1.4,.4,1)}
+  .seal.on{opacity:1;transform:scale(1)}
+</style></head>
+<body>
+<div class="bg"></div>
+
+<svg class="stage" viewBox="0 0 1440 470" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="gP" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="rgba(235,203,112,.5)"/><stop offset="1" stop-color="#FFF0C8"/>
+    </linearGradient>
+  </defs>
+  <line class="rail" x1="120" y1="300" x2="1320" y2="300"/>
+  <line class="prog" id="prog" pathLength="1" x1="120" y1="300" x2="1320" y2="300"/>
+  <text class="cap" x="120" y="252">Le vendeur publie son bien</text>
+  <text class="cap" x="690" y="252">Acheteur et vendeur échangent en direct</text>
+  <text class="cap" x="1200" y="252">Le prix affiché est le prix payé</text>
+  <text class="num" x="120" y="352">01</text>
+  <text class="step" id="s1" x="146" y="352">L'annonce</text>
+  <text class="num" x="660" y="352">02</text>
+  <text class="step" id="s2" x="686" y="352">La rencontre</text>
+  <text class="num" x="1180" y="352">03</text>
+  <text class="step" id="s3" x="1206" y="352">La signature</text>
+</svg>
+
+<div class="veil" style="background:radial-gradient(56% 76% at 50% 42%,rgba(7,15,28,.9) 26%,rgba(7,15,28,.4) 66%,transparent 100%)"></div>
+
+<svg class="over" viewBox="0 0 1440 470" preserveAspectRatio="none">
+  <line class="link2" id="link" x1="690" y1="300" x2="750" y2="300" pathLength="1"/>
+  <circle class="ven" id="ven" cx="180" cy="300" r="11"/>
+  <circle class="ach" id="ach" cx="1260" cy="300" r="11"/>
+  <text class="tagv" id="tv" x="180" y="278">VENDEUR</text>
+  <text class="taga" id="ta" x="1260" y="278">ACHETEUR</text>
+  <g class="seal" id="seal">
+    <rect x="596" y="168" width="248" height="30" rx="15" fill="rgba(235,203,112,.1)" stroke="rgba(235,203,112,.6)"/>
+    <text x="720" y="188" text-anchor="middle" font-family="Sora" font-size="9.5" letter-spacing="2.4" fill="#F5D89A">SANS COMMISSION</text>
+  </g>
+</svg>
+
+<div class="msg">
+  <h3>Le vendeur et l'acheteur, <b>face à face.</b></h3>
+  <p>Trois étapes, aucun intermédiaire. Le prix affiché est le prix payé.</p>
+</div>
+
+<div class="marquee"><span>Paris 17e</span><span>77 m² Carrez</span><span>Diagnostics 2026</span><span>Visite sur rendez-vous</span><span>Wayre</span></div>
+
+<script>
+(function(){
+  const ven=document.getElementById('ven'), ach=document.getElementById('ach');
+  const tv=document.getElementById('tv'), ta=document.getElementById('ta');
+  const prog=document.getElementById('prog'), link=document.getElementById('link');
+  const seal=document.getElementById('seal');
+  const steps=[document.getElementById('s1'),document.getElementById('s2'),document.getElementById('s3')];
+  const DUR=9000, START_X=180, END_X=1260, MEET_L=690, MEET_R=750;
+  let t0=null;
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+
+  function frame(ts){
+    if(!t0) t0=ts;
+    const p=((ts-t0)%DUR)/DUR;
+
+    // progression du rail
+    prog.style.strokeDashoffset = 1-Math.min(1,p/0.92);
+
+    // les deux protagonistes avancent l'un vers l'autre
+    const m=Math.min(1, Math.max(0,(p-0.10)/0.52));
+    const e=ease(m);
+    const vx=lerp(START_X, MEET_L, e);
+    const ax=lerp(END_X, MEET_R, e);
+    ven.setAttribute('cx',vx); ach.setAttribute('cx',ax);
+    tv.setAttribute('x',vx); ta.setAttribute('x',ax);
+
+    // le lien se tend entre eux
+    link.setAttribute('opacity', m>0.96 ? 1 : 0);
+    link.setAttribute('x1',vx+9); link.setAttribute('x2',ax-9);
+
+    // étapes
+    steps[0].classList.toggle('on', p>=0.02);
+    steps[1].classList.toggle('on', p>=0.52);
+    steps[2].classList.toggle('on', p>=0.90);
+    steps[0].nextElementSibling && null;
+
+    // sceau final
+    seal.classList.toggle('on', p>=0.62 && p<0.985);
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body></html>
