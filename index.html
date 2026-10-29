@@ -676,7 +676,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
       <span class="eyebrow rv">Parlons-en</span>
       <h2 class="rv" style="--d:.06s">Recevez le dossier et visitez</h2>
       <p class="lead rv" style="--d:.12s">Dites-nous quel local vous intéresse et dans quel cadre. Nous revenons vers vous pour la suite : accord de confidentialité, dossier, visite.</p>
-      <p class="alt rv" style="--d:.18s">Vous préférez échanger tout de suite ? <a href="https://app.iclosed.io/e/TR7AgencyStudio" target="_blank" rel="noopener">Réservez un créneau</a> ou écrivez à <a href="mailto:infos@tr7agencystudio.com">infos@tr7agencystudio.com</a>.</p>
+      <p class="alt rv" style="--d:.18s">Vous préférez échanger tout de suite ? <a href="#" id="bookLink" role="button">Réservez un créneau</a> ou écrivez à <a href="mailto:contact@wayre.com">contact@wayre.com</a>.</p>
     </div>
     <form id="form" class="rv form2" style="--d:.1s" novalidate>
         <div class="fhead"><span>Votre demande</span><em>2 minutes</em></div>
@@ -917,7 +917,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
       .then(show)
       .catch(function(){
         var n=document.getElementById('doneNote');
-        if(n) n.textContent='L’envoi automatique a échoué. Écrivez-nous à infos@tr7agencystudio.com, nous vous répondons.';
+        if(n) n.textContent='L’envoi automatique a échoué. Écrivez-nous à contact@wayre.com, nous vous répondons.';
         show();
       })
       .finally(function(){ if(btn) btn.disabled=false; });
@@ -985,6 +985,8 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   }
 
   document.getElementById('bookBtn').addEventListener('click', openBook);
+  var bl=document.getElementById('bookLink');
+  if(bl) bl.addEventListener('click', function(e){ e.preventDefault(); openBook(); });
   var selOffre=document.getElementById('offre'); if(selOffre) selOffre.addEventListener('change', majPhoto);
   document.getElementById('bookClose').addEventListener('click', closeBook);
   document.getElementById('prevM').addEventListener('click', function(){ view=new Date(view.getFullYear(),view.getMonth()-1,1); render(); });
