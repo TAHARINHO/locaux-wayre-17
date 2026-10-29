@@ -1039,6 +1039,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   var form=document.getElementById('form'), done=document.getElementById('done');
   if(!form) return;
   var LOC = (document.documentElement.lang === 'en') ? 'en-GB' : 'fr-FR';
+  var SEP = (document.documentElement.lang === 'en') ? ' at ' : ' à ';
   var ICAL='https://app.iclosed.io/e/TR7AgencyStudio/tr7-agency-studio';
   /* PHOTO_PAR_OFFRE : la photo du rendez-vous suit l'offre choisie */
   var PHOTO_PAR_OFFRE={'Local loué (investir)':'images/ecole_hero.jpg',
@@ -1270,7 +1271,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
         document.querySelector('.bookgrid').hidden=true;
         document.querySelector('.stepper').hidden=true;
         var ok=document.getElementById('bookok'); ok.hidden=false;
-        var t=chosenDay.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' à '+chosenSlot;
+        var t=chosenDay.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',year:'numeric'})+SEP+chosenSlot;
         document.getElementById('okWhen').textContent=t.charAt(0).toUpperCase()+t.slice(1);
       });
   });
