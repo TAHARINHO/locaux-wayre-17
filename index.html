@@ -327,8 +327,20 @@ footer details p { margin-top: 8px; }
   .railband p{ font-size:.72rem; }
   .railband .lb{ font-size:.5rem; letter-spacing:.1em; }
   .railband .rail{ margin-top:16px; }
+}
 
 .benefit h3.gold{ color:transparent; background:var(--goldgrad); -webkit-background-clip:text; background-clip:text; }
+
+/* Étapes : titres qui deviennent dorés au fil de la ligne + marqueur animé */
+.step h3{ transition: color .55s ease, background .55s ease; }
+.step.lit h3{ color:transparent; background:var(--goldgrad); -webkit-background-clip:text; background-clip:text; }
+.steps .stepmarker{ position:absolute; left:9px; top:0; width:9px; height:9px; margin-top:-4px;
+  border-radius:50%; background:var(--goldgrad); opacity:0; transition:opacity .3s;
+  box-shadow:0 0 12px rgba(235,203,112,.9); z-index:3; }
+.steps .stepmarker.show{ opacity:1; }
+.steps .stepmarker::after{ content:""; position:absolute; left:50%; top:13px; transform:translateX(-50%);
+  width:0; height:0; border-left:4px solid transparent; border-right:4px solid transparent;
+  border-top:6px solid rgba(235,203,112,.85); }
 </style>
 </head>
 <body>
@@ -478,7 +490,7 @@ footer details p { margin-top: 8px; }
       <h2 class="rv" style="--d:.06s">Du premier contact à la visite, en trois étapes</h2>
     </div>
     <div class="steps" id="steps">
-      <div class="fill" aria-hidden="true"></div>
+      <div class="fill" aria-hidden="true"></div><div class="stepmarker" aria-hidden="true"></div>
       <div class="step rv"><h3>Vous choisissez l’offre</h3><p>Investir dans le local loué ou acheter le local libre. Vous nous indiquez votre budget, votre calendrier et votre financement.</p></div>
       <div class="step rv"><h3>Vous recevez le dossier complet</h3><p>Après la signature d’un accord de confidentialité : adresse exacte, bail, diagnostics complets, procès-verbaux, état des charges.</p></div>
       <div class="step rv"><h3>Vous visitez et vous décidez</h3><p>La visite se fait sur rendez-vous, avec les réponses à vos questions et les pièces pour votre notaire et votre banque.</p></div>
@@ -682,6 +694,31 @@ footer details p { margin-top: 8px; }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+})();
+</script>
+
+<script>
+/* Étapes : allumage progressif des titres + marqueur qui descend */
+(function(){
+  var steps=document.getElementById('steps'); if(!steps) return;
+  var items=[].slice.call(steps.querySelectorAll('.step'));
+  var marker=steps.querySelector('.stepmarker');
+  function upd(){
+    var sr=steps.getBoundingClientRect(), vh=window.innerHeight;
+    var p=Math.max(0,Math.min((vh*0.72-sr.top)/sr.height,1));
+    var h=steps.offsetHeight;
+    items.forEach(function(it){
+      var c=(it.offsetTop+it.offsetHeight*0.35)/h;
+      it.classList.toggle('lit', p>=c);
+    });
+    if(marker){
+      marker.style.top=Math.round(p*(h-16))+'px';
+      marker.classList.toggle('show', p>0.015 && p<0.995);
+    }
+  }
+  window.addEventListener('scroll', upd, {passive:true});
+  window.addEventListener('resize', upd);
+  upd();
 })();
 </script>
 </body>
