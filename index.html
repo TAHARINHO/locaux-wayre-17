@@ -257,6 +257,24 @@ footer details p { margin-top: 8px; }
   .card, .card .ph img, .a { transition: none; }
 }
 
+
+/* Trois onglets centrés — style des pastilles dorées des offres, en plus petit */
+.topbar .wrap { position: relative; }
+.tabs { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; }
+.tab { font-family: "Sora", Arial, sans-serif; font-weight: 600; font-size: .74rem; letter-spacing: .1em;
+  text-transform: uppercase; color: #E7EDF2; background: transparent;
+  border: 1px solid rgba(235,203,112,.32); border-radius: 999px; padding: 8px 17px; cursor: pointer;
+  transition: background .38s cubic-bezier(.2,.8,.2,1), color .38s, border-color .38s, transform .38s, box-shadow .38s; }
+.tab:hover, .tab:focus-visible { background: var(--goldgrad); color: #1A1204; border-color: transparent;
+  transform: translateY(-1.5px); box-shadow: 0 8px 20px -10px rgba(235,203,112,.85); outline: none; }
+.tab.on { background: var(--goldgrad); color: #1A1204; border-color: transparent; }
+@media (max-width: 820px) {
+  .topbar .wrap { flex-wrap: wrap; justify-content: center; gap: 12px 16px; }
+  .tabs { position: static; transform: none; order: 3; width: 100%; justify-content: center; }
+  .topbar img { height: 34px; }
+  /* la barre occupe deux lignes : le titre doit descendre d'autant */
+  .hero-grid { padding-top: 178px; }
+}
 </style>
 </head>
 <body>
@@ -266,7 +284,7 @@ footer details p { margin-top: 8px; }
 
 <main>
 <header class="hero" id="top">
-  <div class="topbar"><div class="wrap"><img src="images/logo-wayre.png" alt="WAYRE, the shortest way to real estate"><button class="btn mag" type="button" data-go="contact">Être contacté</button></div></div>
+  <div class="topbar"><div class="wrap"><img src="images/logo-wayre.png" alt="WAYRE, the shortest way to real estate"><div class="tabs" role="tablist" aria-label="Navigation principale"><button class="tab" type="button" data-go="top">WAY-RE</button><button class="tab" type="button" data-go="offres">Offre</button><button class="tab" type="button" data-go="faq">FAQ</button></div><button class="btn mag" type="button" data-go="contact">Être contacté</button></div></div>
   <div class="wrap hero-grid">
     <div>
       <h1 aria-label="Le chemin le plus court vers l’immobilier professionnel à Paris 17">
@@ -458,8 +476,9 @@ footer details p { margin-top: 8px; }
   // Défilement doux et progressif : la durée s'adapte à la distance,
   // sans à-coup, et s'arrête net si l'utilisateur reprend la main.
   function go(id) {
-    var el = document.getElementById(id);
-    if (!el) return;
+    if (id === "top") { id = ""; }
+    var el = id ? document.getElementById(id) : null;
+    if (!el) { window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" }); return; }
     if (reduce) { el.scrollIntoView({ behavior: "auto", block: "start" }); return; }
     var start = window.pageYOffset;
     var target = el.getBoundingClientRect().top + start;
