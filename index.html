@@ -454,7 +454,31 @@ footer details p { margin-top: 8px; }
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
-  function go(id) { var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }); }
+  // Défilement doux et progressif : la durée s'adapte à la distance,
+  // sans à-coup, et s'arrête net si l'utilisateur reprend la main.
+  function go(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (reduce) { el.scrollIntoView({ behavior: "auto", block: "start" }); return; }
+    var start = window.pageYOffset;
+    var target = el.getBoundingClientRect().top + start;
+    var dist = target - start;
+    var dur = Math.min(1500, Math.max(650, 500 + Math.abs(dist) * 0.32));
+    var t0 = null;
+    var stop = false;
+    var cancel = function () { stop = true; };
+    ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.addEventListener(ev, cancel, { once: true, passive: true }); });
+    function step(ts) {
+      if (stop) return;
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur);
+      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      window.scrollTo(0, start + dist * e);
+      if (p < 1) requestAnimationFrame(step);
+      else ["wheel", "touchstart", "keydown"].forEach(function (ev) { window.removeEventListener(ev, cancel); });
+    }
+    requestAnimationFrame(step);
+  }
   $$("[data-go]").forEach(function (b) { b.addEventListener("click", function () { go(b.getAttribute("data-go")); }); });
   $$("[data-offer]").forEach(function (b) {
     b.addEventListener("click", function () {
