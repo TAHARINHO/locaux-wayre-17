@@ -531,7 +531,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
             <li><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/></svg>
               <div><b>Sur place ou en visio</b><small>Paris 17e, Teams ou Zoom</small></div></li>
             <li><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-5.6 6-5.6s6 2.3 6 5.6"/><circle cx="17.5" cy="9" r="2.4"/><path d="M21 20c0-2.6-1.6-4.4-4-4.8"/></svg>
-              <div><b>Avec Tahar Raifak</b><small>17 ans finance &amp; SAP, DESCF</small></div></li>
+              <div><b>Avec notre équipe</b><small>WAYRE</small></div></li>
           </ul>
           <p>Ce premier échange nous permet de comprendre vos enjeux, de répondre à vos questions et d’explorer ensemble les prochaines étapes.</p>
           <div class="bphoto"><img src="images/vide_hero.jpg" alt="" onerror="this.style.display='none'"></div>
@@ -894,6 +894,16 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   var form=document.getElementById('form'), done=document.getElementById('done');
   if(!form) return;
   var ICAL='https://app.iclosed.io/e/TR7AgencyStudio/tr7-agency-studio';
+  /* PHOTO_PAR_OFFRE : la photo du rendez-vous suit l'offre choisie */
+  var PHOTO_PAR_OFFRE={'Local loué (investir)':'images/ecole_hero.jpg',
+                       'Local libre (acheter)':'images/vide_hero.jpg',
+                       'Les deux':'images/vide_hero.jpg'};
+  function majPhoto(){
+    var sel=document.getElementById('offre'), img=document.querySelector('.bphoto img');
+    if(!sel||!img) return;
+    var src=PHOTO_PAR_OFFRE[sel.value]||'images/vide_hero.jpg';
+    if(img.getAttribute('src')!==src){ img.setAttribute('src',src); }
+  }
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
@@ -916,7 +926,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   var view=new Date(today.getFullYear(), today.getMonth(), 1);
   var chosenDay=null, chosenSlot=null;
 
-  function openBook(){ wrap.hidden=false; document.body.style.overflow='hidden'; render(); }
+  function openBook(){ wrap.hidden=false; document.body.style.overflow='hidden'; majPhoto(); render(); }
   function closeBook(){ wrap.hidden=true; document.body.style.overflow=''; }
   function mk(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
 
@@ -967,6 +977,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   }
 
   document.getElementById('bookBtn').addEventListener('click', openBook);
+  var selOffre=document.getElementById('offre'); if(selOffre) selOffre.addEventListener('change', majPhoto);
   document.getElementById('bookClose').addEventListener('click', closeBook);
   document.getElementById('prevM').addEventListener('click', function(){ view=new Date(view.getFullYear(),view.getMonth()-1,1); render(); });
   document.getElementById('nextM').addEventListener('click', function(){ view=new Date(view.getFullYear(),view.getMonth()+1,1); render(); });
