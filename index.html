@@ -1049,7 +1049,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     var src=PHOTO_PAR_OFFRE[sel.value]||'images/vide_hero.jpg';
     if(img.getAttribute('src')!==src){ img.setAttribute('src',src); }
   }
-  var API_BASE='https://projectcenter.tr7agencystudio.com/wayre-api';
+  var API_BASE=(location.hostname==='way-re.com'||location.hostname==='www.way-re.com')?'/wayre-api':'https://projectcenter.tr7agencystudio.com/wayre-api';
   var API_LEAD=API_BASE+'/lead', API_RDV=API_BASE+'/rdv';
 
   form.addEventListener('submit', function(e){
