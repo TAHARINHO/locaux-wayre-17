@@ -820,7 +820,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
       <span class="eyebrow rv">Let's talk</span>
       <h2 class="rv" style="--d:.06s">Receive the file and book a viewing</h2>
       <p class="lead rv" style="--d:.12s">Tell us which premises interests you and in what context. We will get back to you with the next steps: confidentiality agreement, file, viewing.</p>
-      <p class="alt rv" style="--d:.18s">Would you rather talk right away? <a href="#" id="bookLink" role="button">Book a time</a> or write to <a href="mailto:contact@wayre.com">contact@wayre.com</a>.</p>
+      <p class="alt rv" style="--d:.18s">Would you rather talk right away? <a href="#" id="bookLink" role="button">Book a time</a> or write to <a href="mailto:contact@way-re.com">contact@way-re.com</a>.</p>
     </div>
     <form id="form" class="rv form2" style="--d:.1s" novalidate>
         <div class="fhead"><span>Your request</span><em>2 minutes</em></div>
@@ -875,7 +875,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   <div class="wrap">
     <img src="images/logo-wayre.png" alt="WAYRE">
     <p>Non-contractual information. Carrez floor areas from the June 2026 certificates. Gross yield calculated on the annual rent excluding charges and the sale price, before acquisition costs. Photographs are non-contractual.</p>
-    <p class="footlinks"><a href="mentions-legales.html">Legal notice</a><span>·</span><a href="politique-confidentialite.html">Privacy policy</a><span>·</span><a href="mailto:contact@wayre.com">contact@wayre.com</a></p>
+    <p class="footlinks"><a href="mentions-legales.html">Legal notice</a><span>·</span><a href="politique-confidentialite.html">Privacy policy</a><span>·</span><a href="mailto:contact@way-re.com">contact@way-re.com</a></p>
     
     
   </div>
@@ -1079,7 +1079,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
       .then(show)
       .catch(function(){
         var n=document.getElementById('doneNote');
-        if(n) n.textContent='L’envoi automatique a échoué. Écrivez-nous à contact@wayre.com, nous vous répondons.';
+        if(n) n.textContent='L’envoi automatique a échoué. Écrivez-nous à contact@way-re.com, nous vous répondons.';
         show();
       })
       .finally(function(){ if(btn) btn.disabled=false; });
@@ -1174,7 +1174,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     var hEnd=String(endH).padStart(2,'0')+String(endM).padStart(2,'0');
     var stamp=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
     var ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//WAYRE//RDV//FR','CALSCALE:GREGORIAN',
-      'BEGIN:VEVENT','UID:'+Date.now()+'@wayre.com','DTSTAMP:'+stamp,
+      'BEGIN:VEVENT','UID:'+Date.now()+'@way-re.com','DTSTAMP:'+stamp,
       'DTSTART;TZID=Europe/Paris:'+y+mo+d+'T'+h+'00',
       'DTEND;TZID=Europe/Paris:'+y+mo+d+'T'+hEnd+'00',
       'SUMMARY:Rendez-vous WAYRE - locaux Paris 17e',
