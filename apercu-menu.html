@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WAYRE — propositions de barre de menu</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0B1B33;--navy2:#12263F;--gold1:#F2D9A0;--gold2:#EBCB70;--goldgrad:linear-gradient(100deg,#F6CF82,#EEBC67 45%,#DCA04C);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:#070F1C;font-family:"Sora",Arial,sans-serif;color:#E7EDF2;padding:34px 26px 60px}
+  h1{font-size:15px;letter-spacing:.18em;text-transform:uppercase;color:#7E97AE;font-weight:500;margin-bottom:26px}
+  .variant{margin-bottom:38px}
+  .label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8FA6BB;margin-bottom:10px}
+  .label b{color:#EBCB70}
+  .stage{position:relative;border-radius:16px;overflow:hidden;height:132px;
+    background:radial-gradient(120% 160% at 80% 0%,#1C3A5C 0%,#0B1B33 55%,#081426 100%);
+    border:1px solid rgba(235,203,112,.14)}
+  .stage::after{content:"";position:absolute;inset:0;background:
+    radial-gradient(60% 120% at 12% 100%,rgba(0,120,160,.22),transparent 60%);pointer-events:none}
+  .bar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:20px 26px}
+  .logo{font-weight:600;font-size:15px;letter-spacing:.34em;color:#EAF1F5}
+  .logo span{color:var(--gold2)}
+  .right{display:flex;align-items:center;gap:20px}
+
+  /* ── A · pilules ── */
+  .pill{font-family:"Sora";font-size:11.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;
+    color:#E7EDF2;background:rgba(255,255,255,.045);border:1px solid rgba(235,203,112,.34);
+    border-radius:999px;padding:9px 16px;cursor:pointer;transition:all .35s cubic-bezier(.2,.8,.2,1)}
+  .pill:hover{background:rgba(235,203,112,.16);border-color:var(--gold2);color:#FFF6E2;transform:translateY(-1px);
+    box-shadow:0 6px 18px -8px rgba(235,203,112,.65)}
+
+  /* ── B · texte fin ── */
+  .link{position:relative;font-size:11.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+    color:#D6E2EC;background:none;border:0;cursor:pointer;padding:6px 2px;transition:color .3s}
+  .link::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold2);
+    transform:scaleX(0);transform-origin:left;transition:transform .42s cubic-bezier(.2,.8,.2,1)}
+  .link:hover{color:var(--gold1)}
+  .link:hover::after{transform:scaleX(1)}
+
+  /* ── FR / EN ── */
+  .lang{display:inline-flex;align-items:center;border:1px solid rgba(235,203,112,.3);border-radius:999px;overflow:hidden}
+  .lang button{font-family:"Sora";font-size:10.5px;font-weight:600;letter-spacing:.1em;padding:6px 10px;
+    background:none;border:0;cursor:pointer;color:#9FB4C6;transition:all .3s}
+  .lang button.on{background:var(--goldgrad);color:#1A1204}
+  .lang button:not(.on):hover{color:var(--gold1)}
+
+  /* ── bouton ── */
+  .cta{font-family:"Sora";font-weight:600;font-size:12px;padding:11px 20px;border-radius:999px;border:0;
+    background:var(--goldgrad);color:#1A1204;cursor:pointer;transition:transform .3s,box-shadow .3s}
+  .cta:hover{transform:translateY(-1px);box-shadow:0 10px 24px -10px rgba(235,203,112,.8)}
+
+  /* ── C · barre de verre ── */
+  .glass{display:flex;align-items:center;gap:16px;padding:7px 8px 7px 20px;border-radius:999px;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 30px -18px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.08)}
+  .glass .link{padding:4px 2px}
+
+  .note{font-size:11px;color:#7E97AE;margin-top:9px;line-height:1.6}
+</style>
+</head>
+<body>
+
+<h1>WAYRE — 3 propositions de barre de menu</h1>
+
+<!-- A -->
+<div class="variant">
+  <div class="label"><b>A</b> · Pilules — même matière que le bouton, plus petites</div>
+  <div class="stage"><div class="bar">
+    <div class="logo">WAY<span>RE</span></div>
+    <div class="right">
+      <button class="pill">Nos offres</button>
+      <button class="pill">FAQ</button>
+      <span class="lang"><button class="on">FR</button><button>EN</button></span>
+      <button class="cta">Être contacté</button>
+    </div>
+  </div></div>
+  <p class="note">Élévation douce et halo doré au survol. Les pilules reprennent exactement la bordure du bouton.</p>
+</div>
+
+<!-- B -->
+<div class="variant">
+  <div class="label"><b>B</b> · Texte fin — le plus sobre, soulignement animé</div>
+  <div class="stage"><div class="bar">
+    <div class="logo">WAY<span>RE</span></div>
+    <div class="right">
+      <button class="link">Nos offres</button>
+      <button class="link">FAQ</button>
+      <span class="lang"><button class="on">FR</button><button>EN</button></span>
+      <button class="cta">Être contacté</button>
+    </div>
+  </div></div>
+  <p class="note">Le trait doré se déploie de gauche à droite. Rien ne bouge : seule la ligne apparaît.</p>
+</div>
+
+<!-- C -->
+<div class="variant">
+  <div class="label"><b>C</b> · Barre de verre — les entrées groupées dans un seul bloc</div>
+  <div class="stage"><div class="bar">
+    <div class="logo">WAY<span>RE</span></div>
+    <div class="right">
+      <div class="glass">
+        <button class="link">Nos offres</button>
+        <button class="link">FAQ</button>
+        <span class="lang"><button class="on">FR</button><button>EN</button></span>
+      </div>
+      <button class="cta">Être contacté</button>
+    </div>
+  </div></div>
+  <p class="note">Effet verre dépoli, très discret. Les entrées forment un seul objet, le bouton reste à part.</p>
+</div>
+
+</body>
+</html>
