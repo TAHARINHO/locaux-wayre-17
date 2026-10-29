@@ -1036,6 +1036,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
 (function(){
   var form=document.getElementById('form'), done=document.getElementById('done');
   if(!form) return;
+  var LOC = (document.documentElement.lang === 'en') ? 'en-GB' : 'fr-FR';
   var ICAL='https://app.iclosed.io/e/TR7AgencyStudio/tr7-agency-studio';
   /* PHOTO_PAR_OFFRE : la photo du rendez-vous suit l'offre choisie */
   var PHOTO_PAR_OFFRE={'Local loué (investir)':'images/ecole_hero.jpg',
@@ -1105,7 +1106,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   function mk(d){ return new Date(d.getFullYear(), d.getMonth(), d.getDate()); }
 
   function render(){
-    monthLabel.textContent = view.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+    monthLabel.textContent = view.toLocaleDateString(LOC,{month:'long',year:'numeric'});
     calgrid.innerHTML='';
     var first=new Date(view.getFullYear(), view.getMonth(), 1);
     var start=new Date(first); var dow=(first.getDay()+6)%7; start.setDate(first.getDate()-dow);
@@ -1133,7 +1134,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
 
   function renderSlots(d){
     slotgrid.innerHTML='';
-    dayLabel.textContent = d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    dayLabel.textContent = d.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     HOURS.forEach(function(h){
       var b=document.createElement('button'); b.type='button'; b.className='slot'; b.textContent=h;
       // indisponibilités de démonstration, stables par jour
@@ -1219,7 +1220,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     bf.hidden=false;
     document.getElementById('stp2').classList.remove('on');
     document.getElementById('stp3').classList.add('on');
-    var d=chosenDay.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+    var d=chosenDay.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
     d=d.charAt(0).toUpperCase()+d.slice(1);
     bfWhen.textContent=d+' · '+chosenSlot;
     // préremplissage depuis le formulaire de contact
@@ -1267,7 +1268,7 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
         document.querySelector('.bookgrid').hidden=true;
         document.querySelector('.stepper').hidden=true;
         var ok=document.getElementById('bookok'); ok.hidden=false;
-        var t=chosenDay.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' à '+chosenSlot;
+        var t=chosenDay.toLocaleDateString(LOC,{weekday:'long',day:'numeric',month:'long',year:'numeric'})+' à '+chosenSlot;
         document.getElementById('okWhen').textContent=t.charAt(0).toUpperCase()+t.slice(1);
       });
   });
