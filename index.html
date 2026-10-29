@@ -817,7 +817,8 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     <form id="form" class="rv form2" style="--d:.1s" novalidate>
         <div class="fhead"><span>Votre demande</span><em>2 minutes</em></div>
         <div class="fgrid">
-          <div class="f"><label for="nom">Nom</label><input id="nom" name="nom" autocomplete="name" placeholder="Votre nom" required></div>
+          <div class="f"><label for="prenom">Prénom</label><input id="prenom" name="prenom" autocomplete="given-name" placeholder="Votre prénom" required></div>
+          <div class="f"><label for="nom">Nom</label><input id="nom" name="nom" autocomplete="family-name" placeholder="Votre nom" required></div>
           <div class="f"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required></div>
           <div class="f"><label for="tel">Téléphone</label><input id="tel" name="tel" type="tel" autocomplete="tel" placeholder="06 00 00 00 00"></div>
           <div class="f full">
@@ -1045,11 +1046,12 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var nom=document.getElementById('nom'), email=document.getElementById('email'), ok=document.getElementById('ok'), bad=null;
-    if(!nom.value.trim()) bad=nom;
+    if(!document.getElementById('prenom').value.trim()) bad=document.getElementById('prenom');
+    else if(!nom.value.trim()) bad=nom;
     else if(!/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(email.value)) bad=email;
     else if(!ok.checked) bad=ok;
     if(bad){ bad.focus(); return; }
-    var payload={ nom:nom.value.trim(), email:email.value.trim(),
+    var payload={ prenom:document.getElementById('prenom').value.trim(), nom:nom.value.trim(), email:email.value.trim(),
       tel:document.getElementById('tel').value.trim(),
       offre:document.getElementById('offre').value,
       budget:document.getElementById('budget').value,
@@ -1214,8 +1216,9 @@ h2.title-steps{ font-size: clamp(1.32rem, 2.35vw, 2.05rem); max-width: none; lin
     d=d.charAt(0).toUpperCase()+d.slice(1);
     bfWhen.textContent=d+' · '+chosenSlot;
     // préremplissage depuis le formulaire de contact
-    var n=document.getElementById('nom').value.trim(), m=document.getElementById('email').value.trim();
-    if(n){ var parts=n.split(' '); document.getElementById('bfPrenom').value=parts[0]||''; document.getElementById('bfNom').value=parts.slice(1).join(' ')||''; }
+    var pr=document.getElementById('prenom').value.trim(), n=document.getElementById('nom').value.trim(), m=document.getElementById('email').value.trim();
+    if(pr) document.getElementById('bfPrenom').value=pr;
+    if(n) document.getElementById('bfNom').value=n;
     if(m) document.getElementById('bfEmail').value=m;
     var of=document.getElementById('offre');
     if(of){ var s2=document.getElementById('bfSujet');
