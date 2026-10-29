@@ -257,16 +257,6 @@ footer details p { margin-top: 8px; }
   .card, .card .ph img, .a { transition: none; }
 }
 
-/* Menu du haut — même famille et même or que le bouton */
-.topright { display: flex; align-items: center; gap: 30px; }
-.navlink { font-family: "Sora", Arial, sans-serif; font-weight: 500; font-size: .8rem; letter-spacing: .15em;
-  text-transform: uppercase; color: #E7EDF2; background: none; border: 0; cursor: pointer; padding: 8px 0;
-  position: relative; transition: color .3s; }
-.navlink::after { content: ""; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px;
-  background: var(--gold2); transform: scaleX(0); transform-origin: left; transition: transform .35s ease; }
-.navlink:hover { color: var(--gold1); }
-.navlink:hover::after { transform: scaleX(1); }
-@media (max-width: 760px) { .topright { gap: 16px; } .navlink { display: none; } }
 </style>
 </head>
 <body>
@@ -276,7 +266,7 @@ footer details p { margin-top: 8px; }
 
 <main>
 <header class="hero" id="top">
-  <div class="topbar"><div class="wrap"><img src="images/logo-wayre.png" alt="WAYRE, the shortest way to real estate"><div class="topright"><button class="navlink" type="button" data-go="offres">Nos offres</button><button class="navlink" type="button" data-go="faq">Questions fréquentes</button><button class="btn mag" type="button" data-go="contact">Être contacté</button></div></div></div>
+  <div class="topbar"><div class="wrap"><img src="images/logo-wayre.png" alt="WAYRE, the shortest way to real estate"><button class="btn mag" type="button" data-go="contact">Être contacté</button></div></div>
   <div class="wrap hero-grid">
     <div>
       <h1 aria-label="Le chemin le plus court vers l’immobilier professionnel à Paris 17">
