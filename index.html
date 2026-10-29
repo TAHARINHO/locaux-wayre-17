@@ -293,6 +293,40 @@ footer details p { margin-top: 8px; }
 .topbar .btn:hover, .topbar .btn:focus-visible { background: var(--goldgrad); color: #1A1204;
   border-color: transparent; transform: translateY(-1.5px);
   box-shadow: 0 8px 20px -10px rgba(235,203,112,.85); outline: none; }
+/* ══ BANDE STRUCTURÉE — alignée sur la grille de la hero ══ */
+.hero{ padding-bottom: 208px; }
+.railband{ position:absolute; left:0; right:0; bottom:0; height:252px; z-index:3;
+  display:flex; align-items:flex-start; padding-top:10px; }
+.railband .wrap{ width:100%; }
+.railband .kicker{ display:block; font-family:"Sora",Arial,sans-serif; font-size:.6rem; letter-spacing:.28em;
+  text-transform:uppercase; color:rgba(235,203,112,.55); margin-bottom:10px; }
+.railband h3{ font-family:"Sora",Arial,sans-serif; font-weight:600; font-size:1.55rem; letter-spacing:-.02em;
+  line-height:1.15; color:#F7F3E9; }
+.railband h3 b{ color:transparent; background:var(--goldgrad); -webkit-background-clip:text; background-clip:text; }
+.railband p{ margin-top:7px; font-size:.86rem; color:#93A7B8; font-weight:300; }
+.railband .rail{ position:relative; margin-top:24px; }
+.railband .line{ position:relative; height:1px; background:rgba(235,203,112,.16); overflow:hidden; }
+.railband .line i{ position:absolute; top:-1px; left:0; width:0; height:3px; border-radius:2px;
+  background:linear-gradient(90deg,transparent,#F7DFA8,transparent); opacity:.9; }
+.railband .st{ display:flex; flex-direction:column; gap:7px; }
+.railband .stations{ display:flex; justify-content:space-between; margin-top:-4px; }
+.railband .st:first-child{ align-items:flex-start; }
+.railband .st:last-child{ align-items:flex-end; }
+.railband .st:not(:first-child):not(:last-child){ align-items:center; }
+.railband .dot{ width:6px; height:6px; border-radius:50%; background:rgba(235,203,112,.28);
+  transition:background .45s, box-shadow .45s, transform .45s; }
+.railband .st.on .dot{ background:#EBCB70; box-shadow:0 0 10px rgba(235,203,112,.85); transform:scale(1.25); }
+.railband .lb{ font-family:"Sora",Arial,sans-serif; font-size:.56rem; letter-spacing:.17em;
+  text-transform:uppercase; color:rgba(235,203,112,.34); transition:color .45s; white-space:nowrap; }
+.railband .st.on .lb{ color:#F5D89A; }
+@media (max-width: 820px){
+  .hero{ padding-bottom: 0; flex-direction:column; align-items:stretch; justify-content:flex-start; }
+  .hero > .wrap.hero-grid{ width:100%; }
+  .railband{ position:static; height:auto; padding:34px 0 40px; flex:0 0 auto; }
+  .railband h3{ font-size:1.05rem; }
+  .railband p{ font-size:.72rem; }
+  .railband .lb{ font-size:.5rem; letter-spacing:.1em; }
+  .railband .rail{ margin-top:16px; }
 </style>
 </head>
 <body>
@@ -338,6 +372,24 @@ footer details p { margin-top: 8px; }
         <path class="outline" pathLength="1" d="M318 67 V24 H352 V84"/>
       </svg>
       <div class="badges" aria-hidden="true"><span class="b1">Local libre</span><span class="b2">Local loué</span></div>
+    </div>
+  </div>
+  <!-- BANDE STRUCTURÉE (v2) -->
+  <div class="railband" id="railband">
+    <div class="wrap">
+      <span class="kicker">Première plateforme digitale</span>
+      <h3>Vous parlez enfin <b>au propriétaire.</b></h3>
+      <p>Sans agence, sans commission. Le dossier passe directement d’une main à l’autre.</p>
+      <div class="rail">
+        <div class="line"><i id="railLight"></i></div>
+        <div class="stations" id="stations">
+          <div class="st"><span class="dot"></span><span class="lb">Annonce</span></div>
+          <div class="st"><span class="dot"></span><span class="lb">Contact direct</span></div>
+          <div class="st"><span class="dot"></span><span class="lb">Visite</span></div>
+          <div class="st"><span class="dot"></span><span class="lb">Offre</span></div>
+          <div class="st"><span class="dot"></span><span class="lb">Signature</span></div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="way" aria-hidden="true"></div>
@@ -607,6 +659,27 @@ footer details p { margin-top: 8px; }
     msg.textContent = "Votre messagerie s’ouvre avec le message prêt à envoyer.";
     window.location.href = "mailto:infos@tr7agencystudio.com?subject=" + encodeURIComponent("Demande de dossier, locaux Paris 17e") + "&body=" + encodeURIComponent(body);
   });
+})();
+</script>
+<script>
+/* v2 : une seule animation — la lumière descend le rail */
+(function(){
+  var light=document.getElementById('railLight'), box=document.getElementById('stations');
+  if(!light||!box) return;
+  var sts=[].slice.call(box.querySelectorAll('.st'));
+  var DUR=7200, PAUSE=1400, t0=null;
+  function frame(ts){
+    if(!t0) t0=ts;
+    var el=(ts-t0)%(DUR+PAUSE), p=Math.min(1,el/DUR);
+    var w=box.getBoundingClientRect().width;
+    light.style.width = Math.round(w*0.18)+'px';
+    light.style.transform = 'translateX('+Math.round(p*(w-w*0.18))+'px)';
+    sts.forEach(function(st,i){
+      st.classList.toggle('on', p >= (i/(sts.length-1))*0.96);
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
