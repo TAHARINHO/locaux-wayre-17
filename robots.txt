@@ -1,2 +1,13 @@
 User-agent: *
 Allow: /
+
+# Pages de travail, non destinées au public
+Disallow: /hero-arche.html
+Disallow: /hero-arche-v2.html
+Disallow: /contact-v2.html
+Disallow: /apercu-hero.html
+Disallow: /apercu-menu.html
+Disallow: /demos/
+Disallow: /wayre-api/
+
+Sitemap: https://way-re.com/sitemap.xml

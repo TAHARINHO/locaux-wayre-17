@@ -1,0 +1,35 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@200;300;400;500;600&family=Hanken+Grotesk:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1200px;height:630px;background:#0B0A09;font-family:'Hanken Grotesk',sans-serif;color:#F1EEE8;position:relative;overflow:hidden}
+.photo{position:absolute;right:0;top:0;width:560px;height:630px}
+.photo img{width:100%;height:100%;object-fit:cover;filter:brightness(.88) contrast(1.05)}
+.photo:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0B0A09 0%,rgba(11,10,9,.85) 18%,rgba(11,10,9,.15) 55%,rgba(11,10,9,.35) 100%)}
+.glow{position:absolute;width:520px;height:520px;border-radius:50%;background:#EBCB70;filter:blur(160px);opacity:.13;left:-200px;top:-200px}
+.wrap{position:relative;z-index:2;padding:64px 70px;height:100%;display:flex;flex-direction:column;justify-content:space-between;width:700px}
+.logo{height:34px;width:auto}
+.k{font-family:'Sora';font-size:14px;letter-spacing:.34em;color:#EBCB70;text-transform:uppercase;font-weight:500}
+h1{font-family:'Sora';font-weight:200;font-size:53px;line-height:1.1;letter-spacing:-.025em;margin-top:16px}
+h1 b{font-weight:600;color:#EBCB70}
+.bot{display:flex;align-items:center;gap:26px;border-top:1px solid rgba(235,203,112,.22);padding-top:22px}
+.f{font-family:'Sora';font-size:26px;font-weight:300}
+.f em{font-style:normal;color:#EBCB70;font-size:15px}
+.f span{display:block;font-family:'Hanken Grotesk';font-size:11px;color:#AAA397;letter-spacing:.05em;margin-top:5px;font-weight:300}
+</style></head><body>
+<div class="glow"></div>
+<div class="photo"><img src="/var/www/way-re.com/images/vide_hero.jpg" alt=""></div>
+<div class="wrap">
+  <div>
+    <img class="logo" src="/var/www/way-re.com/images/logo-wayre.png" alt="WAYRE">
+    <div class="k" style="margin-top:46px">Paris 17e · Deux locaux</div>
+    <h1>Le chemin le plus court<br>vers l’immobilier<br><b>professionnel.</b></h1>
+  </div>
+  <div class="bot">
+    <div class="f">650 000<em> €</em><span>PAR LOCAL</span></div>
+    <div class="f">77,40<em> m²</em><span>CARREZ · LOUÉ</span></div>
+    <div class="f">7<em> %</em><span>RENTABILITÉ</span></div>
+    <div class="f">80<em> m²</em><span>CARREZ · LIBRE</span></div>
+  </div>
+</div>
+</body></html>
